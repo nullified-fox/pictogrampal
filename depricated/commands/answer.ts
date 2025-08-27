@@ -6,11 +6,11 @@ import {
     MessageFlags,
     SlashCommandBuilder
 } from "discord.js";
-import Command from "@/managers/commands/Command";
-import { InteractionReplyData } from "@/utilities/types";
-import DatabaseManager from "@/managers/database/DatabaseManager";
-import { evaluateGuess } from "@/managers/ai/gemini";
-import Boolean from "@/methods/Boolean";
+import Command from "../../bot/managers/commands/Command";
+import { InteractionReplyData } from "../../bot/utilities/types";
+import DatabaseManager from "../../bot/managers/database/DatabaseManager";
+import { evaluateGuess } from "../../bot/managers/ai/gemini";
+import Boolean from "../../bot/methods/Boolean";
 
 // Helper function to get the start of the day in UTC
 function getStartOfDayUTC() {

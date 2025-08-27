@@ -4,11 +4,11 @@ import {
     ChatInputCommandInteraction,
     MessageFlags,
 } from "discord.js";
-import { THEMES } from "@/utilities/themes";
-import GuildCommand from "@/managers/commands/GuildCommand";
-import { InteractionReplyData } from "@/utilities/types";
-import DatabaseManager from "@/managers/database/DatabaseManager";
-import { generateGuessTheThing } from "@/managers/ai/gemini";
+import { THEMES } from "../../bot/utilities/themes";
+import GuildCommand from "../../bot/managers/commands/GuildCommand";
+import { InteractionReplyData } from "../../bot/utilities/types";
+import DatabaseManager from "../../bot/managers/database/DatabaseManager";
+import { generateGuessTheThing } from "../../bot/managers/ai/gemini";
 
 // Helper function to get the start of the day in UTC
 function getStartOfDayUTC(date: Date) {

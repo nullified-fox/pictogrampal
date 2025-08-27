@@ -3,10 +3,10 @@ import {
     EmbedBuilder,
     MessageFlags,
 } from "discord.js";
-import Command from "@/managers/commands/Command";
-import { InteractionReplyData } from "@/utilities/types";
-import DatabaseManager from "@/managers/database/DatabaseManager";
-import { generateHint } from "@/managers/ai/gemini";
+import Command from "../../bot/managers/commands/Command";
+import { InteractionReplyData } from "../../bot/utilities/types";
+import DatabaseManager from "../../bot/managers/database/DatabaseManager";
+import { generateHint } from "../../bot/managers/ai/gemini";
 
 // Helper function to get the start of the day in UTC
 function getStartOfDayUTC() {

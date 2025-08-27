@@ -48,7 +48,6 @@ export default class Logger {
         ["SETUP", FgColor.Blue],
         ["DEBUG", FgColor.Magenta],
         ["CLIENT=>DISCORD.JS", FgColor.Orange],
-        ["CLIENT=>GUILD MANAGER", FgColor.Orange],
     ]);
 
     /**

@@ -3,12 +3,12 @@ import {
     EmbedBuilder,
     MessageFlags,
 } from "discord.js";
-import { generateGuessTheThing } from "@/managers/ai/gemini";
-import { EMBED_DEFAULT_COLOR } from "@/utilities/constants";
-import Command from "@/managers/commands/Command";
-import { InteractionReplyData } from "@/utilities/types";
-import { THEMES } from "@/utilities/themes";
-import DatabaseManager from "@/managers/database/DatabaseManager";
+import { generateGuessTheThing } from "../../bot/managers/ai/gemini";
+import { EMBED_DEFAULT_COLOR } from "../../bot/utilities/constants";
+import Command from "../../bot/managers/commands/Command";
+import { InteractionReplyData } from "../../bot/utilities/types";
+import { THEMES } from "../../bot/utilities/themes";
+import DatabaseManager from "../../bot/managers/database/DatabaseManager";
 
 // Helper function to get the start of the day in UTC
 function getStartOfDayUTC() {
