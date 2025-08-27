@@ -7,14 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model PlayedGame {
-  id        Int      @id @default(autoincrement())
-  emojis    String   @unique
-  answer    String
-  theme     String
-  createdAt DateTime @default(now())
-}
-
 // Model for storing the emoji puzzles
 model Puzzle {
   id         Int     @id @default(autoincrement())
@@ -26,8 +18,33 @@ model Puzzle {
 
 // Model for tracking user scores on the leaderboard
 model User {
-  id               String    @id @unique
-  username         String
-  score            Int       @default(0)
-  lastGamePlayedAt DateTime?
+  id         String           @id @unique
+  username   String
+  score      Int              @default(0)
+  dailyPlays UserPuzzlePlay[]
+}
+
+model DailyPuzzle {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @unique
+  theme     String
+  emojis    String
+  thing     String
+  createdAt DateTime @default(now())
+
+  plays UserPuzzlePlay[]
+}
+
+model UserPuzzlePlay {
+  id        Int         @id @default(autoincrement())
+  userId    String
+  puzzleId  Int
+  puzzle    DailyPuzzle @relation(fields: [puzzleId], references: [id])
+  guesses   Int         @default(0)
+  completed Boolean     @default(false)
+  playedAt  DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, puzzleId])
 }

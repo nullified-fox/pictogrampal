@@ -1,0 +1,17 @@
+export const THEMES = [
+  "Movies",
+  "Animals",
+  "Food",
+  "Countries",
+  "Sports",
+  "Famous People",
+  "Household Objects",
+  "Video Games",
+  "Mythology",
+  "Science",
+  "History",
+  "Music",
+  "Literature",
+  "Art",
+  "Space",
+];
