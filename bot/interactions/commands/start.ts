@@ -1,10 +1,9 @@
 import {
     ChatInputCommandInteraction,
     EmbedBuilder,
-    Message,
     MessageFlags,
 } from "discord.js";
-import { evaluateGuess, generateGuessTheThing } from "@/managers/ai/gemini";
+import { generateGuessTheThing } from "@/managers/ai/gemini";
 import { EMBED_DEFAULT_COLOR } from "@/utilities/constants";
 import Command from "@/managers/commands/Command";
 import { InteractionReplyData } from "@/utilities/types";
@@ -91,83 +90,15 @@ export default class StartCommand extends Command<ChatInputCommandInteraction<"c
                 },
             });
 
-            await interaction.editReply({
-                content: "Your daily puzzle is ready! You can guess in the channel.",
-            });
-
             const initialEmbed = new EmbedBuilder()
                 .setColor(EMBED_DEFAULT_COLOR)
                 .setTitle("Guess the Thing!")
                 .setDescription(`Guess what this is: **${dailyPuzzle.emojis}**`)
                 .addFields({ name: "Theme", value: dailyPuzzle.theme })
-                .setFooter({ text: "You have 5 guesses. | Type your answer in the chat." });
+                .setFooter({ text: "You have 5 guesses. Use the /answer command to make a guess." });
 
-            if (!interaction.channel || !interaction.channel.isTextBased()) {
-                // This should ideally not happen with ephemeral reply, but as a safeguard
-                return {
-                    content: "This command can only be used in a text channel.",
-                    flags: MessageFlags.Ephemeral
-                };
-            }
-
-            const gameMessage = await interaction.channel.send({ embeds: [initialEmbed] });
-
-            const collector = interaction.channel.createMessageCollector({
-                filter: (m: Message) => m.author.id === interaction.user.id && !m.author.bot,
-                time: 60000, // 60 seconds
-            });
-
-            const maxGuesses = 5;
-
-            collector.on("collect", async (m: Message) => {
-                const currentPlay = await prisma.userPuzzlePlay.findUnique({ where: { id: userPlay.id } });
-                if (!currentPlay || currentPlay.guesses >= maxGuesses) {
-                    collector.stop("limit");
-                    return;
-                }
-
-                await prisma.userPuzzlePlay.update({
-                    where: { id: userPlay.id },
-                    data: { guesses: { increment: 1 } },
-                });
-
-                const newGuessCount = currentPlay.guesses + 1;
-
-                if (m.content.toLowerCase() === dailyPuzzle!.thing.toLowerCase()) {
-                    collector.stop("correct");
-                    await prisma.userPuzzlePlay.update({
-                        where: { id: userPlay.id },
-                        data: { completed: true },
-                    });
-                    const successEmbed = new EmbedBuilder()
-                        .setColor("Green")
-                        .setTitle("You got it!")
-                        .setDescription(`Congratulations ${m.author}, you guessed it right! The answer was **${dailyPuzzle!.thing}**.`)
-                    await gameMessage.reply({ embeds: [successEmbed] });
-                } else {
-                    if (newGuessCount >= maxGuesses) {
-                        collector.stop("limit");
-                        return;
-                    }
-
-                    const feedback = await evaluateGuess(m.content, dailyPuzzle!.thing, dailyPuzzle!.theme);
-                    const feedbackEmbed = new EmbedBuilder()
-                        .setColor("Yellow")
-                        .setTitle(`Guess ${newGuessCount}/${maxGuesses}`)
-                        .setDescription(`**${m.content}**: ${feedback ?? "I'm not sure about that one."}`);
-                    await m.reply({ embeds: [feedbackEmbed] });
-                }
-            });
-
-            collector.on("end", async (collected, reason) => {
-                const finalPlayState = await prisma.userPuzzlePlay.findUnique({ where: { id: userPlay.id }});
-                if (reason !== "correct" && !finalPlayState?.completed) {
-                    const failureEmbed = new EmbedBuilder()
-                        .setColor("Red")
-                        .setTitle("Game Over!")
-                        .setDescription(`You've used all your guesses! The answer was **${dailyPuzzle!.thing}**.`)
-                    await gameMessage.reply({ embeds: [failureEmbed] });
-                }
+            await interaction.editReply({
+                embeds: [initialEmbed],
             });
 
             return {};
