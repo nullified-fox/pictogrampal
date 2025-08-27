@@ -61,3 +61,5 @@ export const DEVELOPERS: string[] = ['197402126597619713']
 export const DURATION_FORMAT = /^(\d+ *(days?|h(ou)?rs?|min(utes?)?|[mhd]) *)+$/gmi;
 
 export const MAX_MUTE_DURATION = 1000 * 60 * 60 * 24 * 28;
+
+export const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
