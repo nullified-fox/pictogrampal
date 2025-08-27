@@ -10,6 +10,7 @@ import Command from "@/managers/commands/Command";
 import { InteractionReplyData } from "@/utilities/types";
 import DatabaseManager from "@/managers/database/DatabaseManager";
 import { evaluateGuess } from "@/managers/ai/gemini";
+import Boolean from "@/methods/Boolean";
 
 // Helper function to get the start of the day in UTC
 function getStartOfDayUTC() {
@@ -41,8 +42,6 @@ export default class AnswerCommand extends Command<ChatInputCommandInteraction<"
         const today = getStartOfDayUTC();
         const userId = interaction.user.id;
 
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-
         try {
             const userPlay = await prisma.userPuzzlePlay.findFirst({
                 where: {
@@ -57,24 +56,15 @@ export default class AnswerCommand extends Command<ChatInputCommandInteraction<"
             });
 
             if (!userPlay) {
-                return {
-                    content: "You haven't started the puzzle yet! Use `/start` to begin.",
-                    flags: MessageFlags.Ephemeral,
-                };
+                return this.reply(interaction, `You haven't started the puzzle yet! Use \`/start\` to begin.`, false);
             }
 
             if (userPlay.completed) {
-                return {
-                    content: `You have already completed today's puzzle! The answer was **${userPlay.puzzle.thing}**.`,
-                    flags: MessageFlags.Ephemeral,
-                };
+                return this.reply(interaction, `You have already completed today's puzzle! The answer was **${userPlay.puzzle.thing}**.`, false);
             }
 
             if (userPlay.guesses >= MAX_GUESSES) {
-                return {
-                    content: `You have no more guesses left for today. The answer was **${userPlay.puzzle.thing}**.`,
-                    flags: MessageFlags.Ephemeral,
-                };
+                return this.reply(interaction, `You have no more guesses left for today. The answer was **${userPlay.puzzle.thing}**.`, false);
             }
 
             const updatedPlay = await prisma.userPuzzlePlay.update({
@@ -103,14 +93,14 @@ export default class AnswerCommand extends Command<ChatInputCommandInteraction<"
                     .setDescription(`Congratulations, you guessed it right! The answer was **${puzzle.thing}**.`)
                     .setFooter({ text: `You got it in ${newGuessCount} ${newGuessCount === 1 ? 'guess' : 'guesses'}!` });
 
-                await interaction.editReply({ embeds: [successEmbed] });
+                return this.replyEmbed(interaction, successEmbed, false)
             } else {
                 if (newGuessCount >= MAX_GUESSES) {
                     const failureEmbed = new EmbedBuilder()
                         .setColor("Red")
                         .setTitle("Game Over!")
                         .setDescription(`That was your last guess! The answer was **${puzzle.thing}**.`)
-                    await interaction.editReply({ embeds: [failureEmbed] });
+                    return this.replyEmbed(interaction, failureEmbed, false)
                 } else {
                     const feedback = await evaluateGuess(guess, puzzle.thing, puzzle.theme);
                     const remainingGuesses = MAX_GUESSES - newGuessCount;
@@ -119,11 +109,9 @@ export default class AnswerCommand extends Command<ChatInputCommandInteraction<"
                         .setTitle(`Guess ${newGuessCount}/${MAX_GUESSES}`)
                         .setDescription(`**${guess}**: ${feedback ?? "I'm not sure about that one."}`)
                         .setFooter({ text: `You have ${remainingGuesses} ${remainingGuesses === 1 ? 'guess' : 'guesses'} left.` });
-                    await interaction.editReply({ embeds: [feedbackEmbed] });
+                    return this.replyEmbed(interaction, feedbackEmbed, true)
                 }
             }
-
-            return {};
         } catch (error) {
             console.error(error);
             // Consider using a more robust logger here

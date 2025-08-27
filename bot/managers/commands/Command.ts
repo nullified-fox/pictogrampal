@@ -23,10 +23,17 @@ export default abstract class Command<T extends CommandInteraction> {
         return this.data
     }
 
-    protected reply(interaction: T, content: string, isPublic?: Boolean): InteractionReplyData {
+    protected reply(interaction: T, content: string, isPublic?: boolean): InteractionReplyData {
         return {
             content,
-            flags: (isPublic?.value) ? undefined : MessageFlags.Ephemeral
+            flags: isPublic ? undefined : MessageFlags.Ephemeral
         };
+    }
+
+    protected replyEmbed(interaction: T, embedOptions: any, isPublic: boolean): InteractionReplyData {
+        return {
+            embeds: [embedOptions],
+            flags: isPublic ? undefined : MessageFlags.Ephemeral
+        }
     }
 }

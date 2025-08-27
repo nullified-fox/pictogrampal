@@ -20,7 +20,7 @@ export default class HintCommand extends Command<ChatInputCommandInteraction<"ca
     constructor() {
         super({
             name: "hint",
-            description: "Get a hint for the daily puzzle. This will cost you one guess.",
+            description: "Get a hint for the daily puzzle.",
         });
     }
 
@@ -65,9 +65,9 @@ export default class HintCommand extends Command<ChatInputCommandInteraction<"ca
                 };
             }
 
-            if (userPlay.hintUsed) {
+            if (userPlay.hintsUsed >= 2) {
                 return {
-                    content: "You have already used your hint for today's puzzle.",
+                    content: "You have already used your hints for today's puzzle.",
                     flags: MessageFlags.Ephemeral,
                 };
             }
@@ -86,20 +86,14 @@ export default class HintCommand extends Command<ChatInputCommandInteraction<"ca
                     id: userPlay.id,
                 },
                 data: {
-                    guesses: {
-                        increment: 1,
-                    },
-                    hintUsed: true,
+                    hintsUsed: {increment: 1},
                 },
             });
-
-            const remainingGuesses = MAX_GUESSES - updatedPlay.guesses;
 
             const hintEmbed = new EmbedBuilder()
                 .setColor("Blue")
                 .setTitle("Here's a hint!")
                 .setDescription(hint)
-                .setFooter({ text: `This hint cost you one guess. You have ${remainingGuesses} ${remainingGuesses === 1 ? 'guess' : 'guesses'} left.` });
 
             await interaction.editReply({ embeds: [hintEmbed] });
 
