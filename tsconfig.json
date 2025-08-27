@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "types": [
+      "bun-types"
+    ],
+    "baseUrl": "",
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "noImplicitOverride": true,
+    "noEmit": true,
+    "composite": true,
+    "strict": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": [
+        "bot/*"
+      ],
+      "@db/*": [
+        "database/*"
+      ]
+    }
+  },
+  "include": [
+    "./bot/**/*",
+    "./db/**/*"
+  ]
+}
