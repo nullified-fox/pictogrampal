@@ -49,7 +49,7 @@ export default class StartCommand extends Command<ChatInputCommandInteraction<"c
                 },
             });
 
-            if (existingPlay) {
+            if (existingPlay && existingPlay.completed) {
                 return {
                     content: "You have already attempted the puzzle for today. Please come back tomorrow for a new one!",
                     flags: MessageFlags.Ephemeral,
@@ -83,19 +83,21 @@ export default class StartCommand extends Command<ChatInputCommandInteraction<"c
             }
 
             // User hasn't played, so create a play record
-            const userPlay = await prisma.userPuzzlePlay.create({
-                data: {
-                    userId: userId,
-                    puzzleId: dailyPuzzle.id,
-                },
-            });
+            if (!existingPlay) {
+                const userPlay = await prisma.userPuzzlePlay.create({
+                    data: {
+                        userId: userId,
+                        puzzleId: dailyPuzzle.id,
+                    },
+                });
+            }
 
             const initialEmbed = new EmbedBuilder()
                 .setColor(EMBED_DEFAULT_COLOR)
                 .setTitle("Guess the Thing!")
                 .setDescription(`Guess what this is: **${dailyPuzzle.emojis}**`)
                 .addFields({ name: "Theme", value: dailyPuzzle.theme })
-                .setFooter({ text: "You have 5 guesses. Use the /answer command to make a guess." });
+                .setFooter({ text: `You have 5 guesses. Use the /answer command to make a guess.` });
 
             await interaction.editReply({
                 embeds: [initialEmbed],

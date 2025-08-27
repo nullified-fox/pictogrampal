@@ -38,6 +38,25 @@ export async function generateGuessTheThing(theme: string): Promise<GuessTheThin
     }
 }
 
+export async function generateHint(thing: string, theme: string, emojis: string): Promise<string | null> {
+    try {
+        const model = "gemini-2.0-flash";
+        const prompt = `You are a hint generator for a "guess the thing" game. The theme is "${theme}". The emojis are "${emojis}". The correct answer is "${thing}". Generate a single, short hint for the user. The hint should not reveal the answer, but should guide the user towards it. The hint should be a single sentence.`;
+
+        const result = await genAI.models.generateContent({
+            model,
+            contents: prompt,
+        });
+
+        const text = result.text?.trim();
+        return text ?? null;
+
+    } catch (error) {
+        Logger.error("Failed to generate hint:", error as string);
+        return null;
+    }
+}
+
 export type GuessFeedback = "correct theme" | "close to the theme" | "not part of the theme";
 
 export async function evaluateGuess(guess: string, answer: string, theme: string): Promise<GuessFeedback | null> {
