@@ -7,7 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Below this, you'll add your data models
+model PlayedGame {
+  id        Int      @id @default(autoincrement())
+  emojis    String   @unique
+  answer    String
+  theme     String
+  createdAt DateTime @default(now())
+}
 
 // Model for storing the emoji puzzles
 model Puzzle {
@@ -20,7 +26,8 @@ model Puzzle {
 
 // Model for tracking user scores on the leaderboard
 model User {
-  id       String @id @unique
-  username String
-  score    Int    @default(0)
+  id               String    @id @unique
+  username         String
+  score            Int       @default(0)
+  lastGamePlayedAt DateTime?
 }
