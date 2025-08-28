@@ -4,6 +4,11 @@ FROM oven/bun:latest
 # Set the working directory
 WORKDIR /usr/src/app
 
+# This ARG is used during the build process (e.g., for `prisma generate`)
+ARG DATABASE_URL
+# This ENV makes the variable available at runtime for the application
+ENV DATABASE_URL=${DATABASE_URL}
+
 # Copy configuration files
 COPY package.json tsconfig.json ./
 
