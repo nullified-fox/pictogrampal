@@ -1,8 +1,9 @@
 import Command from "@/managers/commands/Command";
 import {ApplicationCommandOptionType, ChatInputCommandInteraction} from "discord.js";
 import {InteractionReplyData} from "@/utilities/types";
+import GuildCommand from "@/managers/commands/GuildCommand";
 
-export default class SetupCommand extends Command<ChatInputCommandInteraction<"cached">> {
+export default class SetupCommand extends GuildCommand<ChatInputCommandInteraction<"cached">> {
     constructor() {
         super({
             name: 'setup',
@@ -91,7 +92,7 @@ export default class SetupCommand extends Command<ChatInputCommandInteraction<"c
                     ]
                 }
             ]
-        });
+        }, ['906838609502552064']);
     }
 
     async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {
