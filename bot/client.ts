@@ -19,6 +19,7 @@ initSentry({
 });
 
 import DatabaseManager from "@/managers/database/DatabaseManager";
+import AIManager from "@/managers/ai/manager";
 
 /**
  * --- Main Discord Client Instance ---
@@ -72,6 +73,7 @@ EXIT_EVENTS.forEach(event => {
  */
 async function initializeServices(): Promise<void> {
     Logger.log("SETUP", "Configuring services...", {context: "Process"});
+    await AIManager.initialize();
     await ComponentManager.cache();
     await CommandManager.cache();
     Logger.log("SETUP", "Services configured successfully", {completed: true, context: "Process"});
