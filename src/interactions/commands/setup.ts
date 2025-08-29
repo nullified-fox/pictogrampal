@@ -3,6 +3,19 @@ import {ApplicationCommandOptionType, ChatInputCommandInteraction} from "discord
 import {InteractionReplyData} from "@/utilities/types";
 import GuildCommand from "@/managers/commands/GuildCommand";
 
+enum SubcommandGroup {
+    Time = "time",
+    Themes = "themes",
+    Hint = "hint",
+}
+
+enum Subcommand {
+    UseAi = "use-ai",
+    UseCustom = "use-custom",
+    Remove = "remove",
+    List = "list",
+}
+
 export default class SetupCommand extends GuildCommand<ChatInputCommandInteraction<"cached">> {
     // Constructor
     constructor() {
@@ -11,7 +24,7 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
             description: 'Manage the bot\'s settings.',
             options: [
                 {
-                    name: 'time',
+                    name: SubcommandGroup.Time,
                     description: 'Set the time for the daily puzzle',
                     type: ApplicationCommandOptionType.Subcommand,
                     options: [
@@ -24,12 +37,12 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                     ]
                 },
                 {
-                    name: 'themes',
+                    name: SubcommandGroup.Themes,
                     description: 'Manage the puzzle themes.',
                     type: ApplicationCommandOptionType.SubcommandGroup,
                     options: [
                         {
-                            name: 'use-ai',
+                            name: Subcommand.UseAi,
                             description: 'Generate a new puzzle using AI (Will be used the next available day)',
                             type: ApplicationCommandOptionType.Subcommand,
                             options: [
@@ -42,7 +55,7 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                             ]
                         },
                         {
-                            name: 'use-custom',
+                            name: Subcommand.UseCustom,
                             description: 'Create a new puzzle with a custom theme',
                             type: ApplicationCommandOptionType.Subcommand,
                             options: [
@@ -73,7 +86,7 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                             ]
                         },
                         {
-                            name: 'remove',
+                            name: Subcommand.Remove,
                             description: 'Remove a puzzle',
                             type: ApplicationCommandOptionType.Subcommand,
                             options: [
@@ -86,14 +99,14 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                             ]
                         },
                         {
-                            name: 'list',
+                            name: Subcommand.List,
                             description: 'View all created puzzles',
                             type: ApplicationCommandOptionType.Subcommand
                         }
                     ]
                 },
                 {
-                    name: 'hint',
+                    name: SubcommandGroup.Hint,
                     description: 'Manage the hint settings',
                     type: ApplicationCommandOptionType.Subcommand,
                     options: [
@@ -117,7 +130,5 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
     }
 
     // Public Methods
-    public async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {
-        return {content: `Command under maintenance`}
-    }
+    public async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {}
 }
