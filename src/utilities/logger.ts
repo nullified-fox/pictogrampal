@@ -38,6 +38,7 @@ interface LogOptions {
  * A custom logger for creating colorful and formatted console output.
  */
 export default class Logger {
+    // Private Static Properties
     /**
      * Maps log levels to specific foreground colors.
      */
@@ -50,13 +51,14 @@ export default class Logger {
         ["CLIENT=>DISCORD.JS", FgColor.Orange],
     ]);
 
+    // Public Static Methods
     /**
      * The core logging method. It formats and prints a message to the console.
      * @param level The log level (e.g., "INFO", "ERROR").
      * @param message The main content of the log message.
      * @param options Additional options for context and completion status.
      */
-    static log(level: string, message: string, options?: LogOptions) {
+    public static log(level: string, message: string, options?: LogOptions) {
         const timestamp = new Date().toLocaleTimeString('en-US', {hour12: false});
         const timestampString = `${FgColor.Grey}[${timestamp}]${Style.Reset}`;
 
@@ -91,7 +93,7 @@ export default class Logger {
      * @param context Optional context string.
      * @param completed Optional completion status.
      */
-    static info(message: string, context?: string, completed: boolean = false) {
+    public static info(message: string, context?: string, completed: boolean = false) {
         Logger.log("INFO", message, {context, completed});
     }
 
@@ -101,7 +103,7 @@ export default class Logger {
      * @param context Optional context string.
      * @param completed Optional completion status.
      */
-    static warn(message: string, context?: string, completed: boolean = false) {
+    public static warn(message: string, context?: string, completed: boolean = false) {
         Logger.log("WARN", message, {context, completed});
     }
 
@@ -111,7 +113,7 @@ export default class Logger {
      * @param context Optional context string.
      * @param completed Optional completion status.
      */
-    static error(message: string, context?: string, completed: boolean = false) {
+    public static error(message: string, context?: string, completed: boolean = false) {
         Logger.log("ERROR", message, {context, completed});
     }
 }

@@ -3,6 +3,7 @@ import {ApplicationCommandOptionType, ChatInputCommandInteraction} from "discord
 import {InteractionReplyData} from "@/utilities/types";
 
 export default class StartCommand extends Command<ChatInputCommandInteraction<"cached">> {
+    // Constructor
     constructor() {
         super({
             name: 'start',
@@ -11,7 +12,8 @@ export default class StartCommand extends Command<ChatInputCommandInteraction<"c
         });
     }
 
-    async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {
+    // Public Methods
+    public async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {
         return {content: `Command under maintenance`}
     }
 }

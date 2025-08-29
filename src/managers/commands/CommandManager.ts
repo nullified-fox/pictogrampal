@@ -14,6 +14,7 @@ import {InteractionReplyData} from "@/utilities/types";
  * This includes caching, publishing, reloading, and handling command interactions.
  */
 export default class CommandManager {
+    // Private Static Properties
     /**
      * A collection of global commands, accessible in all guilds.
      * Keyed by the command name.
@@ -26,12 +27,13 @@ export default class CommandManager {
      */
     private static readonly guildCommands = new Collection<string, Collection<string, GuildCommand<CommandInteraction>>>();
 
+    // Public Static Methods
     /**
      * Caches all command files from the `bot/interactions/commands` directory.
      * It dynamically imports command modules, instantiates them, and sorts them into
      * global or guild-specific collections.
      */
-    static async cache(): Promise<void> {
+    public static async cache(): Promise<void> {
         const dirPath = path.resolve('src/interactions/commands');
 
         Logger.log("SETUP", "Starting caching commands...", {context: `Caching`})
@@ -86,7 +88,7 @@ export default class CommandManager {
      * It registers guild-specific commands for each respective guild and
      * registers global commands to the application.
      */
-    static async publish(): Promise<void> {
+    public static async publish(): Promise<void> {
         Logger.log("SETUP", `Attempting to publish commands to Discord...`, {
             context: `Publish`,
             completed: false
@@ -137,7 +139,7 @@ export default class CommandManager {
      * It retrieves the appropriate command and delegates the autocomplete logic to it.
      * @param interaction The autocomplete interaction to handle.
      */
-    static handleAutocomplete(interaction: AutocompleteInteraction): Promise<void> | void {
+    public static handleAutocomplete(interaction: AutocompleteInteraction): Promise<void> | void {
         const command = CommandManager.get(interaction.commandId, interaction.commandName, interaction.guildId);
 
         if (!command) {
@@ -154,7 +156,7 @@ export default class CommandManager {
      * @param interaction The command interaction to handle.
      * @returns The reply data from the command execution.
      */
-    static handleCommand(interaction: CommandInteraction): InteractionReplyData | Promise<InteractionReplyData> {
+    public static handleCommand(interaction: CommandInteraction): InteractionReplyData | Promise<InteractionReplyData> {
         const command = CommandManager.get(interaction.commandId, interaction.commandName, interaction.guildId);
 
         if (!command) {
@@ -169,6 +171,7 @@ export default class CommandManager {
         return command.execute(interaction);
     }
 
+    // Private Static Methods
     /**
      * Caches a guild-specific command.
      * It instantiates the command and adds it to the collection for each specified guild ID.

@@ -10,19 +10,22 @@ import {CLIENT_DEFAULT_COMMAND_PERMISSIONS, CLIENT_DEFAULT_DM_PERMISSIONS} from 
 import Boolean from "@/structures/Boolean";
 
 export default abstract class Command<T extends CommandInteraction> {
+    // Constructor
     protected constructor(public readonly data: ApplicationCommandData) {
     }
 
-    abstract execute(interaction: T): InteractionReplyData | Promise<InteractionReplyData>;
+    // Public Methods
+    public abstract execute(interaction: T): InteractionReplyData | Promise<InteractionReplyData>;
 
-    autocomplete?(interaction: AutocompleteInteraction): void | Promise<void>;
+    public autocomplete?(interaction: AutocompleteInteraction): void | Promise<void>;
 
-    build(): ApplicationCommandData {
+    public build(): ApplicationCommandData {
         this.data.defaultMemberPermissions ??= CLIENT_DEFAULT_COMMAND_PERMISSIONS;
         this.data.dmPermission ??= CLIENT_DEFAULT_DM_PERMISSIONS.value;
         return this.data
     }
 
+    // Protected Methods
     protected reply(interaction: T, content: string, isPublic?: boolean): InteractionReplyData {
         return {
             content,
