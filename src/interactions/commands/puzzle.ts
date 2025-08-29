@@ -168,9 +168,11 @@ export default class PuzzleCommand extends Command<ChatInputCommandInteraction<"
         await PuzzleDatabaseManager.incrementUserScore(interaction.user.id, 10);
         await PuzzleDatabaseManager.incrementUserStreak(interaction.user.id);
 
+        const data = await PuzzleDatabaseManager.getOrCreateUser(interaction.user.id, interaction.user.username);
+
         const congratsEmbed = new EmbedBuilder()
             .setTitle("Congratulations! 🎉")
-            .setDescription(`You solved the puzzle! The answer was **${answer}**.\n\nYou've been awarded 10 points!`)
+            .setDescription(`You solved the puzzle! The answer was **${answer}**.\n\nYou've been awarded 10 points!\n⭐ Your streak is now ${data.streak}`)
             .setColor("Gold")
             .setFooter({text: "Come back tomorrow for a new puzzle!"});
 
@@ -178,13 +180,16 @@ export default class PuzzleCommand extends Command<ChatInputCommandInteraction<"
     }
 
     private async handleGameOver(interaction: ChatInputCommandInteraction<"cached">, userPlayId: number, answer: string): Promise<InteractionReplyData> {
+        const data = await PuzzleDatabaseManager.getOrCreateUser(interaction.user.id, interaction.user.username);
+        const oldStreak = data.streak;
+
         await PuzzleDatabaseManager.updateUserPlay(userPlayId, { completed: false });
         await PuzzleDatabaseManager.decrementUserScore(interaction.user.id, 3);
         await PuzzleDatabaseManager.clearUserStreak(interaction.user.id);
 
         const gameoverEmbed = new EmbedBuilder()
             .setTitle("Game Over! 😞")
-            .setDescription(`You've exhausted all your guesses! The answer was **${answer}**.\n\nYou've lost 3 points!`)
+            .setDescription(`You've exhausted all your guesses! The answer was **${answer}**.\n\nYou've lost 3 points!\n${data.streak > 1 ? `⛓️‍💥 Streak lost! You had a ${oldStreak} streak.` : `⛓️‍💥 You didn't have a streak, and you still don't.`}`)
             .setColor("Red")
             .setFooter({text: "Better luck next time. Come back tomorrow for a new puzzle!"})
 
