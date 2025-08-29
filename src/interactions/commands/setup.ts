@@ -24,13 +24,13 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                     ]
                 },
                 {
-                    name: 'puzzle',
+                    name: 'themes',
                     description: 'Manage the puzzle themes.',
                     type: ApplicationCommandOptionType.SubcommandGroup,
                     options: [
                         {
                             name: 'use-ai',
-                            description: 'Generate a new puzzle using AI',
+                            description: 'Generate a new puzzle using AI (Will be used the next available day)',
                             type: ApplicationCommandOptionType.Subcommand,
                             options: [
                                 {
@@ -66,7 +66,7 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                                 },
                                 {
                                     name: 'day',
-                                    description: 'The day in HH:MM UTC format',
+                                    description: 'The day in YYYY-MM-DD UTC format',
                                     type: ApplicationCommandOptionType.String,
                                     required: true
                                 }
@@ -89,6 +89,26 @@ export default class SetupCommand extends GuildCommand<ChatInputCommandInteracti
                             name: 'list',
                             description: 'View all created puzzles',
                             type: ApplicationCommandOptionType.Subcommand
+                        }
+                    ]
+                },
+                {
+                    name: 'hint',
+                    description: 'Manage the hint settings',
+                    type: ApplicationCommandOptionType.Subcommand,
+                    options: [
+                        {
+                            name: 'toggle',
+                            description: 'Toggle the hint feedback system',
+                            type: ApplicationCommandOptionType.Boolean,
+                            required: false,
+                        },
+                        {
+                            name: 'amount',
+                            description: 'How many hints can be used (max 3)',
+                            type: ApplicationCommandOptionType.Number,
+                            max_value: 3,
+                            required: false,
                         }
                     ]
                 }
