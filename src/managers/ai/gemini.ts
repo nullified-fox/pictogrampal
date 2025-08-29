@@ -1,8 +1,9 @@
-import {GoogleGenAI} from "@google/genai";
+import {GoogleGenAI, HarmBlockThreshold, HarmCategory, SafetySetting} from "@google/genai";
+import Logger from "@/utilities/logger";
 
-export type GuessTheThing = {
+export type GuessThePuzzle = {
     emojis: string;
-    thing: string;
+    answer: string;
 };
 
 export type GuessFeedback = "correct theme" | "close to the theme" | "not part of the theme";
