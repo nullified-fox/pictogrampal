@@ -28,38 +28,31 @@ export const APP_CLIENT_PARTIALS: readonly Partials[] = [
 
 export const DATE_DEFAULT_TIMEZONE = "UTC";
 
-export const DATE_DEFAULT_FORMAT = "YYYY-MM-dd HH:mm:ss";
-
-export const DATE_LOG_ENTRY_FORMAT: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-    timeZone: DATE_DEFAULT_TIMEZONE
-};
-
 // =======================================================================================
 // discord CONSTANTS
 // =======================================================================================
 
-export const CLIENT_ALLOWED_MENTIONS: MessageMentionOptions = {parse: ["roles", "users"], repliedUser: false};
 export const CLIENT_DEFAULT_COMMAND_PERMISSIONS: readonly bigint[] = [PermissionFlagsBits.ManageGuild];
 export const CLIENT_DEFAULT_DM_PERMISSIONS: Boolean = new Boolean(true);
-
-export const EMBED_FIELD_CHAR_LIMIT = 1000;
-export const EMBED_DEFAULT_COLOR = Colors.Blurple;
-
-export const DEVELOPERS: string[] = ['197402126597619713']
 
 // =======================================================================================
 // MISC
 // =======================================================================================
 
-export const DURATION_FORMAT = /^(\d+ *(days?|h(ou)?rs?|min(utes?)?|[mhd]) *)+$/gmi;
-
-export const MAX_MUTE_DURATION = 1000 * 60 * 60 * 24 * 28;
-
-export const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+export const THEMES = [
+  "Movies",
+  "Animals",
+  "Food",
+  "Countries",
+  "Sports",
+  "Famous People",
+  "Household Objects",
+  "Video Games",
+  "Mythology",
+  "Science",
+  "History",
+  "Music",
+  "Literature",
+  "Art",
+  "Space",
+];

@@ -27,24 +27,12 @@ export default class CommandManager {
     private static readonly guildCommands = new Collection<string, Collection<string, GuildCommand<CommandInteraction>>>();
 
     /**
-     * Retrieves a collection of all commands applicable in a given guild context.
-     * @param guildId The ID of the guild.
-     * @returns A collection of commands.
-     */
-    static getCommands(guildId: Snowflake | null): Collection<string, Command<CommandInteraction>> {
-        const guildCommands = guildId ? this.guildCommands.get(guildId) ?? new Collection() : new Collection();
-        // Combine global commands with the specific guild's commands
-        // @ts-ignore
-        return this.globalCommands.clone().concat(guildCommands);
-    }
-
-    /**
      * Caches all command files from the `bot/interactions/commands` directory.
      * It dynamically imports command modules, instantiates them, and sorts them into
      * global or guild-specific collections.
      */
     static async cache(): Promise<void> {
-        const dirPath = path.resolve('bot/interactions/commands');
+        const dirPath = path.resolve('src/interactions/commands');
 
         Logger.log("SETUP", "Starting caching commands...", {context: `Caching`})
 
@@ -142,64 +130,6 @@ export default class CommandManager {
             context: `Publish`,
             completed: true
         })
-    }
-
-    /**
-     * Hot-reloads all commands.
-     * This involves clearing all commands from Discord, clearing internal caches,
-     * clearing the Node.js module cache for the command files, and then re-running
-     * the caching and publishing process.
-     * @returns A promise that resolves with the count of reloaded commands or an error.
-     */
-    static async reload(): Promise<{ count: number, error?: Error }> {
-        Logger.log("RELOAD", "Initiating hot-reload of commands...");
-
-        try {
-            const dirPath = path.resolve('bot/interactions/commands');
-            if (!fs.existsSync(dirPath)) {
-                Logger.warn("Cannot reload commands: Commands directory not found.", "RELOAD");
-                return {count: 0};
-            }
-
-            // Unregister all commands from Discord to prevent ghost commands
-            const guildIds = [...this.guildCommands.keys()];
-            await client.application.commands.set([]);
-            Logger.log("RELOAD", `Cleared all global commands from Discord.`);
-            for (const guildId of guildIds) {
-                const guild = await client.guilds.fetch(guildId).catch(() => null);
-                if (guild) {
-                    await guild.commands.set([]);
-                    Logger.log("RELOAD", `Cleared commands from guild ${guild.name} (${guild.id}).`);
-                }
-            }
-
-            // Clear internal command collections
-            this.globalCommands.clear();
-            this.guildCommands.clear();
-
-            // Find and delete all command files from the Node.js module cache
-            // This is the crucial step that allows updated files to be read
-            const fileNames = fs.readdirSync(dirPath);
-            for (const name of fileNames) {
-                const filePath = path.resolve(dirPath, name);
-                if (require.cache[filePath]) {
-                    delete require.cache[filePath];
-                }
-            }
-            Logger.log("RELOAD", `Un-cached ${fileNames.length} command modules.`);
-
-            // Re-run the original caching and publishing logic
-            await this.cache();
-            await this.publish();
-
-            const commandCount = this.globalCommands.size + this.guildCommands.reduce((acc, col) => acc + col.size, 0);
-            return {count: commandCount};
-        } catch (e) {
-            const error = e as Error;
-            Logger.error(`Command reload failed: ${error.message}`, 'RELOAD');
-            captureException(error);
-            return {count: 0, error};
-        }
     }
 
     /**

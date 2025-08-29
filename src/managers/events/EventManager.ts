@@ -15,7 +15,7 @@ export default class EventManager {
      * It distinguishes between regular and once-only events based on the listener's options.
      */
     static async mount(): Promise<void> {
-        const dirPath = path.resolve("bot/events")
+        const dirPath = path.resolve("src/events")
 
         if (!fs.existsSync(dirPath)) {
             return;
