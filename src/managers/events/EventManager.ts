@@ -14,7 +14,7 @@ export default class EventManager {
      * Loads all event listener files from the `bot/events` directory and attaches them to the discord.
      * It distinguishes between regular and once-only events based on the listener's options.
      */
-    static async mount(): Promise<void> {
+    public static async mount(): Promise<void> {
         const dirPath = path.resolve("src/events")
 
         if (!fs.existsSync(dirPath)) {

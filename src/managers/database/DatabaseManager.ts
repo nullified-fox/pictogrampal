@@ -3,14 +3,22 @@ import Logger from "@/utilities/logger";
 import axios from "axios";
 
 class DatabaseManager {
+    // Private Static Properties
     private static instance: DatabaseManager;
+
+    // Private Properties
     private readonly prisma: PrismaClient;
     private connectionPromise: Promise<void> | null = null;
+    private status: 'CONNECTED' | 'DISCONNECTED' | 'CONNECTING' = 'DISCONNECTED';
+    private reconnectInterval: NodeJS.Timeout | null = null;
+    private notificationSent: boolean = false;
 
+    // Constructor
     private constructor() {
         this.prisma = new PrismaClient();
     }
 
+    // Public Static Methods
     public static getInstance(): DatabaseManager {
         if (!DatabaseManager.instance) {
             DatabaseManager.instance = new DatabaseManager();
@@ -18,6 +26,7 @@ class DatabaseManager {
         return DatabaseManager.instance;
     }
 
+    // Public Methods
     public getPrismaClient(): PrismaClient {
         return this.prisma;
     }
@@ -29,10 +38,12 @@ class DatabaseManager {
         return this.connectionPromise;
     }
 
-    private status: 'CONNECTED' | 'DISCONNECTED' | 'CONNECTING' = 'DISCONNECTED';
-    private reconnectInterval: NodeJS.Timeout | null = null;
-    private notificationSent: boolean = false;
+    public async disconnect(): Promise<void> {
+        await this.prisma.$disconnect();
+        Logger.log("SETUP", "Successfully disconnected from the database.", { context: "DatabaseManager" });
+    }
 
+    // Private Methods
     private async internalConnect(): Promise<void> {
         this.status = 'CONNECTING';
         try {
@@ -98,11 +109,6 @@ class DatabaseManager {
                 // internalConnect already logs the error
             }
         }, 60 * 1000);
-    }
-
-    public async disconnect(): Promise<void> {
-        await this.prisma.$disconnect();
-        Logger.log("SETUP", "Successfully disconnected from the database.", { context: "DatabaseManager" });
     }
 }
 

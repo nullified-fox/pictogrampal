@@ -3,6 +3,7 @@ import {ChatInputCommandInteraction} from "discord.js";
 import {InteractionReplyData} from "@/utilities/types";
 
 export default class HintCommand extends Command<ChatInputCommandInteraction<"cached">> {
+    // Constructor
     constructor() {
         super({
             name: 'hint',
@@ -10,7 +11,8 @@ export default class HintCommand extends Command<ChatInputCommandInteraction<"ca
         });
     }
 
-    async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {
+    // Public Methods
+    public async execute(interaction: ChatInputCommandInteraction<"cached">): Promise<InteractionReplyData> {
         return {content: `Feature not yet implemented`}
     }
 }

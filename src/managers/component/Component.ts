@@ -2,10 +2,12 @@ import {InteractionReplyData} from "@/utilities/types";
 import {MessageComponentInteraction, ModalSubmitInteraction} from "discord.js";
 
 export default abstract class Component {
+    // Constructor
     protected constructor(public readonly customId: CustomID) {
     };
 
-    abstract execute(interaction: ComponentInteraction): InteractionReplyData | Promise<InteractionReplyData>
+    // Public Methods
+    public abstract execute(interaction: ComponentInteraction): InteractionReplyData | Promise<InteractionReplyData>
 }
 
 export type ComponentInteraction = MessageComponentInteraction | ModalSubmitInteraction;

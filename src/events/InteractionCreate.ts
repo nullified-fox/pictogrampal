@@ -14,11 +14,13 @@ import {InteractionReplyData} from "@/utilities/types";
 import ComponentManager from "@/managers/component/ComponentManager";
 
 export default class InteractionCreate extends Event {
+    // Constructor
     constructor() {
         super(Events.InteractionCreate);
     }
 
-    async execute(interaction: Interaction): Promise<void> {
+    // Public Methods
+    public async execute(interaction: Interaction): Promise<void> {
         if (interaction.isAutocomplete()) {
             return this.handleAutocomplete(interaction);
         }
@@ -56,6 +58,7 @@ export default class InteractionCreate extends Event {
         }
     }
 
+    // Private Methods
     private async handleAutocomplete(interaction: AutocompleteInteraction): Promise<void> {
         try {
             await CommandManager.handleAutocomplete(interaction);

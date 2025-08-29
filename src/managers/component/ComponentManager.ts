@@ -8,9 +8,11 @@ import Logger from "@/utilities/logger";
 import {pluralize} from "@/utilities";
 
 export default class ComponentManager {
+    // Private Static Properties
     private static readonly _cache = new Collection<CustomID, Component>;
 
-    static async cache(): Promise<void> {
+    // Public Static Methods
+    public static async cache(): Promise<void> {
         const dirpath = path.resolve("bot/interactions/components");
 
         Logger.log("SETUP", "Starting caching components...", {context: `Caching`})
@@ -51,7 +53,7 @@ export default class ComponentManager {
         Logger.log("SETUP", `Cached ${count} ${pluralize(count, "component")}`, {completed: true, context: `Caching`})
     }
 
-    static parseCustomId(customId: CustomID): string {
+    public static parseCustomId(customId: CustomID): string {
         if (typeof customId === "string") {
             return customId;
         }
@@ -70,7 +72,7 @@ export default class ComponentManager {
         }
     }
 
-    static handle(interaction: ComponentInteraction): Promise<InteractionReplyData> | InteractionReplyData {
+    public static handle(interaction: ComponentInteraction): Promise<InteractionReplyData> | InteractionReplyData {
         // Retrieve the component's instance from cache by its custom ID
         Logger.log("INFO", `Handling component interaction with customId: \`${interaction.customId}\` - In guild: ${interaction.guildId}`, {context: `Interaction`});
         const component = ComponentManager._getComponent(interaction.customId);
@@ -83,6 +85,7 @@ export default class ComponentManager {
         return component.execute(interaction);
     }
 
+    // Private Static Methods
     private static _getComponent(customId: string): Component | undefined {
         return ComponentManager._cache.find(component => {
             if (typeof component.customId === "string") {

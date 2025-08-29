@@ -3,8 +3,10 @@ import Logger from "@/utilities/logger";
 import GeminiAPI from "@/managers/ai/gemini";
 
 export default class AIManager {
+    // Public Static Properties
     public static gemini: GeminiAPI;
 
+    // Public Static Methods
     public static async initialize() {
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
