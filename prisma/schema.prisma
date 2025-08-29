@@ -18,6 +18,7 @@ model User {
   id         String           @id @unique
   username   String
   score      Int              @default(0)
+  streak     Int              @default(0)
   dailyPlays UserPuzzlePlay[]
 }
 
