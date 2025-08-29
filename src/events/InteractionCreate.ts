@@ -1,4 +1,4 @@
-import Event from "../managers/events/Event";
+import Event from "@/managers/events/Event";
 import {
     AutocompleteInteraction,
     Events,

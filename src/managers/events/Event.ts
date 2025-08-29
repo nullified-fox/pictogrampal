@@ -1,5 +1,5 @@
 import {ClientEvents, Events} from "discord.js";
-import Boolean from "@/methods/Boolean";
+import Boolean from "@/structures/Boolean";
 
 export default abstract class Event {
     protected constructor(

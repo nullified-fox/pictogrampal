@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import {InteractionReplyData} from "@/utilities/types";
 import {CLIENT_DEFAULT_COMMAND_PERMISSIONS, CLIENT_DEFAULT_DM_PERMISSIONS} from "@/utilities/constants";
-import Boolean from "@/methods/Boolean";
+import Boolean from "@/structures/Boolean";
 
 export default abstract class Command<T extends CommandInteraction> {
     protected constructor(public readonly data: ApplicationCommandData) {

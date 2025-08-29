@@ -1,5 +1,5 @@
 import {InteractionEditReplyOptions, InteractionReplyOptions} from "discord.js";
-import Boolean from "@/methods/Boolean";
+import Boolean from "@/structures/Boolean";
 
 export type InteractionReplyData =
     (InteractionReplyOptions | InteractionEditReplyOptions) & Partial<Record<"temporary", Boolean>>
