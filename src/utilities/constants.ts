@@ -1,5 +1,5 @@
 import {Colors, GatewayIntentBits, MessageMentionOptions, Partials, PermissionFlagsBits} from "discord.js";
-import Boolean from "@/methods/Boolean";
+import Boolean from "@/structures/Boolean";
 
 export const EXIT_EVENTS = ["SIGHUP", "SIGINT", "SIGQUIT", "SIGILL", "SIGTRAP", "SIGABRT", "SIGBUS", "SIGFPE", "SIGUSR1", "SIGSEGV", "SIGUSR2", "SIGTERM", "uncaughtException", "unhandledRejection"];
 

@@ -4,7 +4,7 @@
   "description": "Fun guessing game discord bot",
   "main": "index.js",
   "scripts": {
-    "start": "bun bot/index.ts"
+    "start": "bun src/index.ts"
   },
   "keywords": [],
   "author": "",

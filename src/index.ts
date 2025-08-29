@@ -1,13 +1,13 @@
 import {ShardingManager} from 'discord.js';
 import path from 'path';
-import Logger from './utilities/logger';
+import Logger from '@/utilities/logger';
 
 if (!process.env.BOT_TOKEN) {
     Logger.error("No token provided! Configure the BOT_TOKEN environment variable.");
     throw new Error("No token provided! Configure the BOT_TOKEN environment variable.");
 }
 
-const manager = new ShardingManager(path.resolve('bot/client.ts'), {
+const manager = new ShardingManager(path.resolve('src/client.ts'), {
     token: process.env.BOT_TOKEN,
     totalShards: 'auto',
 });
